@@ -1,0 +1,9 @@
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Form Builder</h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <button class="btn btn-outline-primary p-2 mr-2" (click)="this.componentEvent.event.next(openForm)" >Open</button>
+        <button class="btn btn-default p-2 mr-2" (click)="this.componentEvent.event.next(downloadForm)">Save</button>
+      </nav>
+    </div>
+
+<router-outlet></router-outlet>
