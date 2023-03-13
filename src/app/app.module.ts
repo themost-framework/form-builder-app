@@ -9,6 +9,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ComponentEventService } from './component-event.service';
 import { PreviewComponent } from './preview/preview.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,11 @@ import { PreviewComponent } from './preview/preview.component';
     NgxDropzoneModule
   ],
   providers: [
-    ComponentEventService
+    ComponentEventService,
+    {
+        provide: LocationStrategy,
+        useClass: HashLocationStrategy
+    }
   ],
   bootstrap: [AppComponent]
 })

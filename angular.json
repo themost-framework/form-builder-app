@@ -23,6 +23,10 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+                "formiojs",
+                "lodash"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/favicon.png",
