@@ -10,6 +10,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ComponentEventService } from './component-event.service';
 import { PreviewComponent } from './preview/preview.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,10 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     AppRoutingModule,
     FormioModule,
     ModalModule.forRoot(),
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    ClipboardModule,
+    AceEditorModule
+
   ],
   providers: [
     ComponentEventService,

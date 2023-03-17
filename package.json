@@ -7,11 +7,13 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ngcc": "ngcc"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~11.2.14",
+    "@angular/cdk": "^11.2.13",
     "@angular/common": "~11.2.14",
     "@angular/compiler": "~11.2.14",
     "@angular/core": "~11.2.14",
@@ -23,8 +25,10 @@
     "angular-formio": "^4.11.5",
     "blob-util": "^2.0.2",
     "bootstrap": "^4.6.1",
+    "ng2-ace-editor": "^0.3.9",
     "ngx-bootstrap": "^7.1.0",
     "ngx-dropzone": "^3.0.0",
+    "ngx-json-viewer": "^3.2.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"

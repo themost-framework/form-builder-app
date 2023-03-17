@@ -7,6 +7,7 @@
   </div>
   <div class="modal-body">
     <div class="open-form-banner mb-2">
+
     </div>
     <div class="col-12">
       <ngx-dropzone [multiple]="false" [accept]="'application/json'" (change)="onSelectForm($event)">
@@ -18,6 +19,45 @@
         <button type="button" class="btn btn-primary" (click)="modalRef?.hide()" data-dismiss="modal">Close</button>
       </div>
 </ng-template>
+
+<ng-template #viewSourceTemplate>
+  <div class="modal-header bg-primary">
+    <h4 class="modal-title pull-left text-white">Form Source</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden text-white">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body p-1">
+          <ng-container *ngIf="lastError">
+            <div class="alert alert-danger" role="alert">
+              {{lastError.message}}
+            </div>
+          </ng-container>
+          <ace-editor (textChanged)="onSourceChange($event)" [theme]="'github'" [mode]="'javascript'" [(text)]="source" #editor style="min-height: 640px; width:100%; overflow: auto;">
+          </ace-editor>
+  </div>
+  <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="saveSource()" data-dismiss="save">Save</button>
+        <button type="button" class="btn btn-light" (click)="closeSource()" data-dismiss="close">Close</button>
+      </div>
+</ng-template>
+
+<ng-template #previewTemplate>
+    <div class="modal-header bg-primary">
+    <h4 class="modal-title pull-left text-white">Preview</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden text-white">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12">
+      <div>
+        <formio #formComponent [form]="form"></formio>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
 
 <div class="col-12">
 <form-builder #formBuilder [form]="form" (change)="onChange($event)"></form-builder>

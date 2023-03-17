@@ -1,11 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ComponentEventService, openFormEvent, downloadFormEvent } from '../component-event.service';
+import { ComponentEventService, openFormEvent, downloadFormEvent, copyFormEvent, previewFormEvent, viewSourceEvent } from '../component-event.service';
 import { FormBuilder } from 'formiojs';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { AceEditorComponent } from 'ng2-ace-editor';
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
-  styleUrls: ['./builder.component.scss']
+  styleUrls: ['./builder.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BuilderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
@@ -19,17 +22,35 @@ export class BuilderComponent implements OnInit, OnDestroy {
   };
   public modalRef: BsModalRef;
 
+  public source: string;
+
+  public lastError?: any;
+
   @ViewChild('openTemplate', {
     static: true
   }) openTemplate: any;
+
+  @ViewChild('previewTemplate', {
+    static: true
+  }) previewTemplate: any;
+
+  @ViewChild('viewSourceTemplate', {
+    static: true
+  }) viewSourceTemplate: any;
 
   @ViewChild('formBuilder', {
     static: true
   }) formBuilder: FormBuilder;
 
+  @ViewChild('editor', {
+    static: false
+  }) editor: AceEditorComponent;
+
   private eventSubscription: any;
 
-  constructor(private componentEvent: ComponentEventService, private modalService: BsModalService) {
+  constructor(private componentEvent: ComponentEventService,
+    private modalService: BsModalService,
+    private clipboard: Clipboard) {
     //
   }
 
@@ -43,9 +64,34 @@ export class BuilderComponent implements OnInit, OnDestroy {
       if (event === openFormEvent) {
         this.modalRef = this.modalService.show(this.openTemplate);
       }
+      if (event === viewSourceEvent) {
+        this.lastError = null;
+        const copy = localStorage.getItem('BuilderComponent.form');
+        this.source = JSON.stringify(JSON.parse(copy), null, 4);
+        this.modalRef = this.modalService.show(this.viewSourceTemplate, {
+          class: 'modal-xl',
+          keyboard: false,
+          ignoreBackdropClick: true
+        });
+
+      }
+      if (event === previewFormEvent) {
+        this.modalRef = this.modalService.show(this.previewTemplate, {
+          class: 'modal-xl',
+          keyboard: false,
+          ignoreBackdropClick: true
+        });
+      }
+      if (event === copyFormEvent) {
+        const copy = localStorage.getItem('BuilderComponent.form');
+        if (copy) {
+          this.clipboard.copy(JSON.stringify(JSON.parse(copy), null, 4));
+        }
+      }
       if (event === downloadFormEvent) {
         // download form
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.form, null, 4));
+        const activeForm = localStorage.getItem('BuilderComponent.form');
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(JSON.parse(activeForm), null, 4));
         const anchorElement = document.createElement('a');
         anchorElement.setAttribute("href", dataStr);
         anchorElement.setAttribute("download", "form.json");
@@ -67,6 +113,25 @@ export class BuilderComponent implements OnInit, OnDestroy {
         this.form = JSON.parse(form);
       });
     }
+  }
+
+  saveSource() {
+    try {
+      this.form = JSON.parse(this.source);
+      localStorage.setItem('BuilderComponent.form', JSON.stringify(this.form))
+      this.modalRef.hide();
+      this.lastError = null;
+    } catch (error) {
+      this.lastError = error;
+    }
+  }
+  closeSource() {
+    this.lastError = null;
+    this.modalRef.hide();
+  }
+
+  onSourceChange(event: any) {
+    this.lastError = null;
   }
 
 }

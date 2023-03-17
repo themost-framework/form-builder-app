@@ -5,8 +5,20 @@ export const openFormEvent = {
   type: 'form:open'
 }
 
+export const copyFormEvent = {
+  type: 'form:copy'
+}
+
 export const downloadFormEvent = {
   type: 'form:download'
+}
+
+export const previewFormEvent = {
+  type: 'form:preview'
+}
+
+export const viewSourceEvent = {
+  type: 'form:source'
 }
 
 @Injectable({

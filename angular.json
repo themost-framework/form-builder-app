@@ -30,12 +30,30 @@
             "assets": [
               "src/favicon.ico",
               "src/favicon.png",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "worker-javascript.js",
+                "input": "./node_modules/ace-builds/src-min/",
+                "output": "/"
+              },
+              { "glob": "worker-css.js", "input": "./node_modules/ace-builds/src-min/", "output": "/" },
+              { "glob": "worker-json.js", "input": "./node_modules/ace-builds/src-min/", "output": "/" },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ace-builds/src/",
+                "output": "/"
+              }
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/ace-builds/src-min/ace.js",
+              "./node_modules/ace-builds/src/mode-html.js",
+              "./node_modules/ace-builds/src/worker-javascript.js",
+              "./node_modules/ace-builds/src-noconflict/mode-javascript.js",
+              "./node_modules/ace-builds/src-noconflict/ext-language_tools.js"
+            ]
           },
           "configurations": {
             "production": {
