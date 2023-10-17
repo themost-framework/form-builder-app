@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormioModule, FormioAppConfig } from 'angular-formio';
+import { FormioModule, FormioAppConfig } from '@formio/angular';
 import { BuilderComponent } from './builder/builder.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxDropzoneModule } from 'ngx-dropzone';

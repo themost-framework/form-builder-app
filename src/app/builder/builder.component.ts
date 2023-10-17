@@ -1,16 +1,17 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ViewContainerRef, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ComponentEventService, openFormEvent, downloadFormEvent, copyFormEvent, previewFormEvent, viewSourceEvent } from '../component-event.service';
 import { FormBuilder } from 'formiojs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { AceEditorComponent } from 'ng2-ace-editor';
+import { Input } from 'formiojs/types/components/_classes/input/input';
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class BuilderComponent implements OnInit, OnDestroy {
+export class BuilderComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.eventSubscription) {
       this.eventSubscription.unsubscribe();
@@ -25,6 +26,8 @@ export class BuilderComponent implements OnInit, OnDestroy {
   public source: string;
 
   public lastError?: any;
+
+  public sample: any = {};
 
   @ViewChild('openTemplate', {
     static: true
@@ -54,7 +57,7 @@ export class BuilderComponent implements OnInit, OnDestroy {
     //
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     // get form from session storage
     const lastForm  = localStorage.getItem('BuilderComponent.form');
     if (lastForm) {
@@ -76,6 +79,9 @@ export class BuilderComponent implements OnInit, OnDestroy {
 
       }
       if (event === previewFormEvent) {
+        if (this.form && this.form.sample) {
+          this.sample = this.form.sample;
+        }
         this.modalRef = this.modalService.show(this.previewTemplate, {
           class: 'modal-xl',
           keyboard: false,
@@ -102,7 +108,9 @@ export class BuilderComponent implements OnInit, OnDestroy {
   }
 
   onChange(event) {
-    localStorage.setItem('BuilderComponent.form', JSON.stringify(event.form));
+    if (event.form) {
+      localStorage.setItem('BuilderComponent.form', JSON.stringify(event.form));
+    }
   }
 
   onSelectForm(event: any) {
